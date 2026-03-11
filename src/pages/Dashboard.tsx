@@ -73,10 +73,10 @@ const Dashboard = () => {
         </CardContent>
       </Card>
 
-      {/* Recent observations */}
+      {/*  observations history */}
       <Card>
         <CardHeader>
-          <CardTitle className="font-sans">Observasi Terbaru</CardTitle>
+          <CardTitle className="font-sans">Riwayat Observasi </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">

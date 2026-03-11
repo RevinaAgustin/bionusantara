@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Camera, Upload, MapPin, Sparkles, Loader2 } from "lucide-react";
+import { Camera, Upload, MapPin, Sparkles, Loader2, Save, Link } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import exifr from "exifr";
 
@@ -138,7 +138,7 @@ const Observasi = () => {
                 <Input
                   value={formData.speciesName}
                   onChange={(e) => setFormData({ ...formData, speciesName: e.target.value })}
-                  placeholder="Contoh: Elang Jawa"
+                  placeholder="Contoh: Jati Emas ..."
                 />
               </div>
               <div>
@@ -146,7 +146,7 @@ const Observasi = () => {
                 <Input
                   value={formData.scientificName}
                   onChange={(e) => setFormData({ ...formData, scientificName: e.target.value })}
-                  placeholder="Contoh: Nisaetus bartelsi"
+                  placeholder="Contoh: Tectona grandis ..."
                   className="italic"
                 />
               </div>
@@ -215,10 +215,22 @@ const Observasi = () => {
           </CardContent>
         </Card>
 
-        <Button type="submit" size="lg" className="w-full gap-2">
-          <Upload className="h-5 w-5" />
-          Kirim Observasi
-        </Button>
+        <div className="flex flex-col gap-4 sm:flex-row mt-6">
+          <Button type="submit" size="lg" className="flex-1 gap-2">
+            <Upload className="h-5 w-5" />
+            Kirim Observasi
+          </Button>
+          
+          <Button 
+            type="button" 
+            variant="outline" 
+            size="lg" 
+            className="flex-1 gap-2 bg-transparent border-border hover:bg-accent hover:text-accent-foreground hover:border-accent"
+          >
+            <Save className="h-5 w-5" />
+            Simpan sebagai Draft
+          </Button>
+        </div>
       </form>
     </div>
   );

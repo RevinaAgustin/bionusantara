@@ -28,7 +28,7 @@ const Index = () => {
               Nusantara
             </h1>
             <p className="mb-8 text-lg text-muted-foreground md:text-xl">
-              Bergabunglah dengan ribuan warga ilmuwan untuk mendokumentasikan kekayaan hayati Indonesia. 
+              Bergabunglah dengan ribuan warga dan ilmuwan Indonesia untuk mendokumentasikan kekayaan hayati lokal. 
               Setiap observasi Anda berkontribusi pada konservasi.
             </p>
             <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">

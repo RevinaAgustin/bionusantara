@@ -9,6 +9,7 @@ import Jelajah from "./pages/Jelajah";
 import Observasi from "./pages/Observasi";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
+import DetailSpesies from "./pages/detailSpesies";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/observasi" element={<Observasi />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/detailSpesies/:id" element={<DetailSpesies/>} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
