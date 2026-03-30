@@ -9,6 +9,8 @@ import { Map, Grid3X3, Search, Filter } from "lucide-react";
 import { Link } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { useNavigate } from "react-router-dom";
+import { Button } from "../components/ui/button";
 
 // Fix default marker icon
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -24,6 +26,7 @@ const validated = mockObservations.filter((o) => o.status === "validated");
 const CATEGORIES = ["Semua", "Hoya", "Kayu", "Plankton"];
 
 const Jelajah = () => {
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Semua");
 
@@ -77,12 +80,13 @@ const Jelajah = () => {
                       <p className="text-xs italic text-gray-500">{obs.scientificName}</p>
                       <p className="mt-1 text-xs">📅 {obs.date}</p>
                       <p className="text-xs">👤 {obs.observer}</p>
-                     <Link 
-                        to={`/detailSpesies/${obs.id}`}
-                        className="mt-4 flex w-full items-center justify-center rounded-md bg-primary px-3 py-2 text-sm font-medium text-white! transition-colors hover:bg-secondary/100"
-                      >
-                        Lihat Detail
-                      </Link>
+                     <Button 
+                      size="sm" 
+                      className="w-full mt-2 gap-2" 
+                      onClick={() => navigate(`/detailSpesies/${obs.id}`)} 
+                    >
+                      Lihat Detail
+                    </Button>
                     </div>
                   </Popup>
                 </Marker>
@@ -149,12 +153,13 @@ const Jelajah = () => {
                         {species.observationCount} obs
                       </span>
                     </div>
-                    <Link 
-                      to={`/detailSpesies/${species.id}`}
-                      className="mt-4 flex w-full items-center justify-center rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+                    <Button 
+                      size="sm" 
+                      className="w-full mt-2 gap-2" 
+                      onClick={() => navigate(`/detailSpesies/${species.id}`)} 
                     >
                       Lihat Detail
-                    </Link>
+                    </Button>
                   </CardContent>
                 </Card>
               ))}
