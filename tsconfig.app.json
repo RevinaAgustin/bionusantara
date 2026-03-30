@@ -26,7 +26,9 @@
   },
   "include": ["src"],
   "baseUrl": ".",
-  "paths": {
-  "@/*": ["./src/*"]
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
 }
 }

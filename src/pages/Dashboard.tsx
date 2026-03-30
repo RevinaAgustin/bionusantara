@@ -37,7 +37,6 @@ const Dashboard = () => {
       <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[
           { label: "Total Observasi", value: userObservations.length, icon: Camera, color: "text-primary" },
-          { label: "Spesies Unik", value: uniqueSpecies, icon: Leaf, color: "text-emerald" },
           { label: "Tervalidasi", value: validated, icon: TrendingUp, color: "text-secondary" },
           { label: "Menunggu", value: pending, icon: Clock, color: "text-accent" },
         ].map((s) => (

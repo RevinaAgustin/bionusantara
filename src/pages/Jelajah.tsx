@@ -77,7 +77,10 @@ const Jelajah = () => {
                       <p className="text-xs italic text-gray-500">{obs.scientificName}</p>
                       <p className="mt-1 text-xs">📅 {obs.date}</p>
                       <p className="text-xs">👤 {obs.observer}</p>
-                      <Link to={`/detailSpesies/${obs.id}`} className="mt-2 inline-block text-sm text-primary font-medium hover:underline">
+                     <Link 
+                        to={`/detailSpesies/${obs.id}`}
+                        className="mt-4 flex w-full items-center justify-center rounded-md bg-primary px-3 py-2 text-sm font-medium text-white! transition-colors hover:bg-secondary/100"
+                      >
                         Lihat Detail
                       </Link>
                     </div>
