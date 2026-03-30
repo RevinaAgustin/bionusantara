@@ -12,7 +12,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
 const chartData = [
   { month: "Sep", observasi: 3 },
   { month: "Okt", observasi: 5 },
-  { month: "Nov", observasi: 8 },
+  { month: "Nov", observasi: 20 },
   { month: "Des", observasi: 4 },
   { month: "Jan", observasi: 6 },
   { month: "Feb", observasi: 7 },
