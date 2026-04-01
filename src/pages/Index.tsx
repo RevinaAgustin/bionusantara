@@ -14,7 +14,6 @@ const fadeUp = {
 const Index = () => {
   return (
     <div className="flex flex-col">
-      {/* Hero */}
       <section className="relative overflow-hidden bg-gradient-to-br from-emerald-light via-background to-amber-light">
         <div className="container mx-auto px-4 py-20 md:py-32">
           <motion.div className="mx-auto max-w-3xl text-center" {...fadeUp}>
@@ -48,8 +47,6 @@ const Index = () => {
           </motion.div>
         </div>
       </section>
-
-      {/* Stats */}
       <section className="border-y bg-card">
         <div className="container mx-auto grid grid-cols-1 gap-0 divide-y sm:grid-cols-3 sm:divide-x sm:divide-y-0">
           {[
@@ -75,8 +72,6 @@ const Index = () => {
           ))}
         </div>
       </section>
-
-      {/* How it works */}
       <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="mb-12 text-center">
@@ -127,8 +122,6 @@ const Index = () => {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
       <footer className="border-t bg-card py-8">
         <div className="container mx-auto flex flex-col items-center gap-2 px-4 text-center text-sm text-muted-foreground">
           <div className="flex items-center gap-2 font-medium text-foreground">

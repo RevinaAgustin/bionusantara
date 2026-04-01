@@ -11,7 +11,6 @@ const Navbar = () => {
   const location = useLocation();
   const { toast } = useToast();
 
-  // Cek status login setiap pindah halaman
   useEffect(() => {
     const status = localStorage.getItem("isLoggedIn");
     setIsLoggedIn(status === "true");
@@ -23,30 +22,20 @@ const Navbar = () => {
     window.location.href = "/"; 
   };
 
-  // SAKELAR AJAIB: Ngecek apakah user lagi di "Dunia Privat" (Dashboard/Observasi)
   const isPrivateMode = location.pathname.startsWith("/dashboard") || location.pathname.startsWith("/observasi");
 
   return (
     <nav className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-md">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        
-        {/* LOGO (SELALU DI KIRI) */}
         <Link to="/" className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
             <Leaf className="h-5 w-5 text-primary-foreground" />
           </div>
           <span className="text-lg font-bold font-serif tracking-tight">BioNusantara</span>
         </Link>
-
-        {/* ========================================================= */}
-        {/* DESKTOP MENU (MEPET KANAN KARENA ml-auto) */}
-        {/* ========================================================= */}
         <div className="hidden md:flex items-center gap-1 ml-auto">
           
           {!isPrivateMode ? (
-            // ---------------------------------------------------
-            // DUNIA PUBLIK (Cuma ada Beranda, Jelajah, dan Masuk)
-            // ---------------------------------------------------
             <>
               <Link to="/">
                 <Button variant={location.pathname === "/" ? "default" : "ghost"} size="sm" className="gap-2">
@@ -58,11 +47,7 @@ const Navbar = () => {
                   <Map className="h-4 w-4" /> Jelajah
                 </Button>
               </Link>
-              
-              {/* Garis Pemisah Estetik */}
               <div className="h-6 w-px bg-border mx-2"></div>
-
-              {/* Tombol Aksi Publik */}
               {!isLoggedIn ? (
                 <Link to="/login">
                   <Button size="sm" className="gap-2 bg-primary text-primary-foreground hover:bg-primary/90 shadow-sm">
@@ -78,9 +63,6 @@ const Navbar = () => {
               )}
             </>
           ) : (
-            // ---------------------------------------------------
-            // DUNIA PRIVAT (Cuma ada Dashboard, Observasi, Profil)
-            // ---------------------------------------------------
             <>
               <Link to="/dashboard">
                 <Button variant={location.pathname === "/dashboard" ? "default" : "ghost"} size="sm" className="gap-2">
@@ -92,11 +74,7 @@ const Navbar = () => {
                   <Camera className="h-4 w-4" /> Observasi
                 </Button>
               </Link>
-
-              {/* Garis Pemisah Estetik */}
               <div className="h-6 w-px bg-border mx-3"></div>
-
-              {/* Info Profil */}
               <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground mr-2">
                 <div className="bg-primary/10 p-1.5 rounded-full text-primary">
                   <User className="h-4 w-4" />
@@ -111,15 +89,10 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* MOBILE TOGGLE */}
         <Button variant="ghost" size="icon" className="md:hidden ml-auto" onClick={() => setMobileOpen(!mobileOpen)}>
           {mobileOpen ? <X /> : <Menu />}
         </Button>
       </div>
-
-      {/* ========================================================= */}
-      {/* MOBILE MENU (Ikut aturan 2 Dunia) */}
-      {/* ========================================================= */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -129,9 +102,7 @@ const Navbar = () => {
             className="overflow-hidden border-t md:hidden bg-background"
           >
             <div className="flex flex-col gap-1 p-4">
-              
               {!isPrivateMode ? (
-                // --- DUNIA PUBLIK MOBILE ---
                 <>
                   <Link to="/" onClick={() => setMobileOpen(false)}>
                     <Button variant={location.pathname === "/" ? "default" : "ghost"} className="w-full justify-start gap-2">
@@ -159,7 +130,6 @@ const Navbar = () => {
                   )}
                 </>
               ) : (
-                // --- DUNIA PRIVAT MOBILE ---
                 <>
                   <Link to="/dashboard" onClick={() => setMobileOpen(false)}>
                     <Button variant={location.pathname === "/dashboard" ? "default" : "ghost"} className="w-full justify-start gap-2">

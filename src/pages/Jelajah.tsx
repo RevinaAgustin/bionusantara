@@ -12,7 +12,6 @@ import L from "leaflet";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 
-// Fix default marker icon
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png",
@@ -21,8 +20,6 @@ L.Icon.Default.mergeOptions({
 });
 
 const validated = mockObservations.filter((o) => o.status === "validated");
-
-// Daftar kategori sesuai model AI
 const CATEGORIES = ["Semua", "Hoya", "Kayu", "Plankton"];
 
 const Jelajah = () => {
@@ -54,7 +51,6 @@ const Jelajah = () => {
             <Grid3X3 className="h-4 w-4" /> Galeri Spesies
           </TabsTrigger>
         </TabsList>
-
         <TabsContent value="peta">
           <div className="overflow-hidden rounded-lg border" style={{ height: "500px" }}>
             <MapContainer
@@ -68,27 +64,46 @@ const Jelajah = () => {
               />
               {validated.map((obs) => (
                 <Marker key={obs.id} position={[obs.latitude, obs.longitude]}>
-                  <Popup>
+                  <Popup
+                    eventHandlers={{
+                      add: (e) => {
+                        const popupNode = e.target.getElement();
+
+                        if (popupNode) {
+                          popupNode
+                            .querySelector(".detail-btn")
+                            ?.addEventListener("click", (ev) => {
+                              ev.stopPropagation();
+                              window.location.href = `/detailSpesies/${obs.id}`;
+                            });
+                        }
+                      },
+                    }}
+                  >
                     <div className="w-52">
-                      <img
-                        src={obs.photoUrl}
-                        alt={obs.speciesName}
-                        className="mb-2 h-32 w-full rounded object-cover"
-                        onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }}
-                      />
-                      <p className="font-bold">{obs.speciesName}</p>
-                      <p className="text-xs italic text-gray-500">{obs.scientificName}</p>
-                      <p className="mt-1 text-xs">📅 {obs.date}</p>
-                      <p className="text-xs">👤 {obs.observer}</p>
-                     <Button 
+                    <img
+                      src={obs.photoUrl}
+                      alt={obs.speciesName}
+                      className="mb-2 h-32 w-full rounded object-cover"
+                      onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }}
+                    />
+                    <p className="font-bold">{obs.speciesName}</p>
+                    <p className="text-xs italic text-gray-500">{obs.scientificName}</p>
+                    <p className="mt-1 text-xs">📅 {obs.date}</p>
+                    <p className="text-xs">👤 {obs.observer}</p>
+                    
+                    <Button 
                       size="sm" 
-                      className="w-full mt-2 gap-2" 
-                      onClick={() => navigate(`/detailSpesies/${obs.id}`)} 
+                      className="w-full mt-2 gap-2 cursor-pointer relative z-50" 
+                      onClick={() => { window.location.href = `/detailSpesies/${obs.id}`; }}
+                      onPointerUp={() => { window.location.href = `/detailSpesies/${obs.id}`; }}
+                      onTouchEnd={() => { window.location.href = `/detailSpesies/${obs.id}`; }}
                     >
                       Lihat Detail
                     </Button>
-                    </div>
-                  </Popup>
+                    
+                  </div>
+                </Popup>
                 </Marker>
               ))}
             </MapContainer>
@@ -96,9 +111,7 @@ const Jelajah = () => {
         </TabsContent>
 
         <TabsContent value="galeri">
-          {/* Baris Pencarian dan Filter Kategori */}
           <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-            {/* Kotak Pencarian */}
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
@@ -109,7 +122,6 @@ const Jelajah = () => {
               />
             </div>
             
-            {/* Tombol-tombol Filter Kategori */}
             <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
               <Filter className="h-4 w-4 text-muted-foreground mr-1 hidden sm:block" />
               {CATEGORIES.map((cat) => (
@@ -128,7 +140,6 @@ const Jelajah = () => {
             </div>
           </div>
 
-          {/* Grid Galeri */}
           {filteredSpecies.length > 0 ? (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {filteredSpecies.map((species) => (
@@ -165,7 +176,6 @@ const Jelajah = () => {
               ))}
             </div>
           ) : (
-            /*  jika data tidak ditemukan */
             <div className="py-12 text-center border rounded-lg bg-muted/20">
               <p className="text-muted-foreground">Tidak ada spesies yang cocok dengan filter tersebut.</p>
               <button 

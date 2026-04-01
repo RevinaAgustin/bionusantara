@@ -12,7 +12,6 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
-// Fix default marker icon Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png",
@@ -41,9 +40,8 @@ const Observasi = () => {
   const [loading, setLoading] = useState(false);
   
   const [mapPosition, setMapPosition] = useState<L.LatLng | null>(null);
-  const defaultCenter: [number, number] = [-6.200000, 106.816666]; // Default Jakarta
+  const defaultCenter: [number, number] = [-6.200000, 106.816666];
 
-  // INI KUNCI PLAN B NYA: State untuk menyembunyikan/menampilkan Peta Manual
   const [showManualLocation, setShowManualLocation] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -61,22 +59,16 @@ const handlePhotoUpload = useCallback(async (e: React.ChangeEvent<HTMLInputEleme
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Tampilkan preview foto di UI
     const reader = new FileReader();
     reader.onload = (ev) => setPhoto(ev.target?.result as string);
     reader.readAsDataURL(file);
 
-    setLoading(true); // Mulai loading validasi
+    setLoading(true);
 
-    // ==========================================
-    // STEP 1: VALIDASI KONTEN AI (SATPAM)
-    // ==========================================
-    // Simulasi: Kita bikin peluang 20% foto ditolak untuk testing UI
     const isImageValid = Math.random() > 0.2; 
 
     setTimeout(async () => {
       if (!isImageValid) {
-        // JIKA DITOLAK: Hapus foto, matikan loading, munculkan error
         setPhoto(null);
         setLoading(false);
         toast({ 
@@ -84,12 +76,9 @@ const handlePhotoUpload = useCallback(async (e: React.ChangeEvent<HTMLInputEleme
           description: "Sistem mendeteksi gambar tidak relevan. Harap hanya unggah foto dari kategori Hoya, Kayu, atau Plankton.", 
           variant: "destructive" 
         });
-        return; // Berhenti di sini, jangan lanjut baca EXIF
+        return;
       }
 
-      // ==========================================
-      // STEP 2: JIKA LOLOS VALIDASI, BACA EXIF
-      // ==========================================
       try {
         const exif = await exifr.parse(file, ["GPSLatitude", "GPSLongitude", "DateTimeOriginal"]);
         if (exif && exif.latitude && exif.longitude) {
@@ -110,9 +99,6 @@ const handlePhotoUpload = useCallback(async (e: React.ChangeEvent<HTMLInputEleme
         toast({ title: "Validasi Lolos", description: "Format foto tidak mendukung metadata. Silakan atur lokasi manual di peta.", variant: "destructive" });
       }
 
-      // ==========================================
-      // STEP 3: SARAN SPESIES DARI AI
-      // ==========================================
       const mockSpeciesList = [
         { common: "Hoya Bintang", scientific: "Hoya carnosa", cat: "Hoya" },
         { common: "Jati Emas", scientific: "Tectona grandis", cat: "Kayu" },
@@ -126,12 +112,11 @@ const handlePhotoUpload = useCallback(async (e: React.ChangeEvent<HTMLInputEleme
         speciesName: randomSpecies.common,
         scientificName: randomSpecies.scientific,
       }));
-      setLoading(false); // Selesai loading
+      setLoading(false);
       
-    }, 1500); // Waktu jeda 1.5 detik seolah-olah AI lagi mikir
+    }, 1500);
   }, [toast]);
 
-  // Fitur Plan B: Ambil lokasi saat ini
   const handleCurrentLocation = () => {
     if (!navigator.geolocation) {
       toast({ title: "Error", description: "Browser Anda tidak mendukung fitur lokasi.", variant: "destructive" });
@@ -201,8 +186,6 @@ const handlePhotoUpload = useCallback(async (e: React.ChangeEvent<HTMLInputEleme
             )}
           </CardContent>
         </Card>
-
-        {/* Species Info Component */}
         <Card>
           <CardHeader>
             <CardTitle className="text-lg font-sans">Informasi Spesies</CardTitle>
@@ -216,8 +199,6 @@ const handlePhotoUpload = useCallback(async (e: React.ChangeEvent<HTMLInputEleme
             <div><Label>Catatan Observasi</Label><Textarea value={formData.notes} onChange={(e) => setFormData({ ...formData, notes: e.target.value })} rows={3} /></div>
           </CardContent>
         </Card>
-
-        {/* Location Component */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-lg font-sans">
@@ -225,8 +206,6 @@ const handlePhotoUpload = useCallback(async (e: React.ChangeEvent<HTMLInputEleme
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            
-            {/* PLAN B: HANYA MUNCUL JIKA EXIF GAGAL / showManualLocation = true */}
             {showManualLocation && (
               <div className="space-y-3 bg-muted/30 p-4 rounded-lg border border-border">
                 <div className="flex items-center justify-between mb-2">

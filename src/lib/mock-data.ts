@@ -1,4 +1,3 @@
-//data yg dipake buat mock di halaman Jelajah sama Index, biar ga error pas di develop
 export const mockSpecies = [
   {
     id: "HY-01",
@@ -26,7 +25,6 @@ export const mockSpecies = [
   }
 ];
 
-// Data Peta Observasi (Biar peta Leaflet nggak error)
 export const mockObservations = [
   {
     id: "OBS-01",

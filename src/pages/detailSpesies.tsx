@@ -45,7 +45,7 @@ const DetailSpesies = () => {
         observer: "Sistem BioNusantara",
         date: "-",
         category: species.category,
-        locationName: "Taman Nasional Lore Lindu", // Dummy default untuk data galeri
+        locationName: "Taman Nasional Lore Lindu",
       }
     : null;
 
@@ -137,7 +137,6 @@ const DetailSpesies = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0 relative">
-              {/* Ini obatnya: style zIndex 0 ditambahkan biar nggak numpuk toast */}
               <div className="h-[250px] w-full relative isolate" style={{ zIndex: 0 }}>
                 <MapContainer
                   center={[data.lat, data.lng]}
@@ -154,7 +153,6 @@ const DetailSpesies = () => {
                   <Marker position={[data.lat, data.lng]} />
                 </MapContainer>
               </div>
-              {/* Desain baru kotak lokasi dengan nama kawasan */}
               <div className="absolute bottom-2 left-2 right-2 bg-background/95 backdrop-blur-sm p-3 rounded-md border border-border text-center shadow-md z-10 pointer-events-none">
                 <p className="font-bold text-sm text-primary mb-1">{data.locationName}</p>
                 <p className="text-xs text-muted-foreground font-medium">Lat: {data.lat.toFixed(4)}, Lng: {data.lng.toFixed(4)}</p>

@@ -9,11 +9,11 @@ import Jelajah from "./pages/Jelajah";
 import Observasi from "./pages/Observasi";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
-import Login from "./pages/Login"; // Pastikan file Login ada
+import Login from "./pages/Login";
+import DetailSpesies from "./pages/detailSpesies";
 
 const queryClient = new QueryClient();
 
-// Komponen Pelindung Halaman
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
   if (!isLoggedIn) {
@@ -33,7 +33,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/jelajah" element={<Jelajah />} />
           <Route path="/login" element={<Login />} />
-          
+          <Route path="/detailSpesies/:id" element={<DetailSpesies />} />
           <Route path="/observasi" element={<ProtectedRoute><Observasi /></ProtectedRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           

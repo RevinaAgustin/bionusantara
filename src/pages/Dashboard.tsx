@@ -33,7 +33,6 @@ const Dashboard = () => {
       <h1 className="mb-2 text-3xl font-bold">Dashboard</h1>
       <p className="mb-6 text-muted-foreground">Rapor kontribusi Anda</p>
 
-      {/* Stats cards */}
       <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {[
           { label: "Total Observasi", value: userObservations.length, icon: Camera, color: "text-primary" },
@@ -53,8 +52,6 @@ const Dashboard = () => {
           </Card>
         ))}
       </div>
-
-      {/* Chart */}
       <Card className="mb-8">
         <CardHeader>
           <CardTitle className="font-sans">Observasi per Bulan</CardTitle>
@@ -71,8 +68,6 @@ const Dashboard = () => {
           </ChartContainer>
         </CardContent>
       </Card>
-
-      {/*  observations history */}
       <Card>
         <CardHeader>
           <CardTitle className="font-sans">Riwayat Observasi </CardTitle>
