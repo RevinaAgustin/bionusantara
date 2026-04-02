@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { mockObservations, mockSpecies } from "@/lib/mock-data";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { Map, Grid3X3, Search, Filter } from "lucide-react";
+import { Map, Grid3X3, Search, Filter, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -26,6 +26,7 @@ const Jelajah = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Semua");
+  const [selectedSpecies, setSelectedSpecies] = useState<string | null>(null);
 
   const filteredSpecies = mockSpecies.filter((s) => {
     const matchSearch =
@@ -36,6 +37,10 @@ const Jelajah = () => {
 
     return matchSearch && matchCategory;
   });
+
+  const speciesObservations = selectedSpecies 
+    ? validated.filter(obs => obs.speciesName === selectedSpecies)
+    : [];
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -51,6 +56,8 @@ const Jelajah = () => {
             <Grid3X3 className="h-4 w-4" /> Galeri Spesies
           </TabsTrigger>
         </TabsList>
+
+        {/* PETA CONTENT */}
         <TabsContent value="peta">
           <div className="overflow-hidden rounded-lg border" style={{ height: "500px" }}>
             <MapContainer
@@ -94,7 +101,7 @@ const Jelajah = () => {
                     
                     <Button 
                       size="sm" 
-                      className="w-full mt-2 gap-2 cursor-pointer relative z-50" 
+                      className="w-full mt-2 gap-2 cursor-pointer relative z-50 detail-btn" 
                       onClick={() => { window.location.href = `/detailSpesies/${obs.id}`; }}
                       onPointerUp={() => { window.location.href = `/detailSpesies/${obs.id}`; }}
                       onTouchEnd={() => { window.location.href = `/detailSpesies/${obs.id}`; }}
@@ -110,81 +117,127 @@ const Jelajah = () => {
           </div>
         </TabsContent>
 
+        {/* GALERI CONTENT */}
         <TabsContent value="galeri">
-          <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                placeholder="Cari nama spesies..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            
-            <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
-              <Filter className="h-4 w-4 text-muted-foreground mr-1 hidden sm:block" />
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors border ${
-                    selectedCategory === cat
-                      ? "bg-primary text-primary-foreground border-primary"
-                      : "bg-background text-foreground hover:bg-accent hover:text-accent-foreground hover:border-accent border-border"
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-          </div>
+          {selectedSpecies ? (
+            <div>
+              <button
+                onClick={() => setSelectedSpecies(null)}
+                className="mb-6 flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <ArrowLeft className="mr-2 h-4 w-4" /> Kembali ke Daftar Spesies
+              </button>
 
-          {filteredSpecies.length > 0 ? (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {filteredSpecies.map((species) => (
-                <Card key={species.id} className="overflow-hidden transition-all hover:shadow-md">
-                  <img
-                    src={species.photoUrl}
-                    alt={species.commonName}
-                    className="h-48 w-full object-cover transition-transform hover:scale-105"
-                    onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }}
-                  />
-                  <CardContent className="p-4">
-                    <h3 className="font-bold text-lg">{species.commonName}</h3>
-                    <p className="text-sm italic text-muted-foreground mb-3">{species.scientificName}</p>
-                    <div className="flex items-center justify-between">
-                      <Badge variant={
-                        species.category === 'Hoya' ? 'default' : 
-                        species.category === 'Kayu' ? 'secondary' : 'outline'
-                      }>
-                        {species.category}
-                      </Badge>
-                      <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded-md">
-                        {species.observationCount} obs
-                      </span>
-                    </div>
-                    <Button 
-                      size="sm" 
-                      className="w-full mt-2 gap-2" 
-                      onClick={() => navigate(`/detailSpesies/${species.id}`)} 
-                    >
-                      Lihat Detail
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
+              {speciesObservations.length > 0 ? (
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {speciesObservations.map((obs) => (
+                    <Card key={obs.id} className="overflow-hidden transition-all hover:shadow-md">
+                      <img
+                        src={obs.photoUrl}
+                        alt={obs.speciesName}
+                        className="h-48 w-full object-cover transition-transform hover:scale-105"
+                        onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }}
+                      />
+                      <CardContent className="p-4">
+                        <p className="text-xs text-muted-foreground mb-1">📅 {obs.date} • 👤 {obs.observer}</p>
+                        <h3 className="font-bold text-lg">{obs.speciesName}</h3>
+                        <p className="text-sm italic text-muted-foreground mb-3">{obs.scientificName}</p>
+                        
+                        <Button 
+                          size="sm" 
+                          className="w-full mt-2 gap-2" 
+                          onClick={() => navigate(`/detailSpesies/${obs.id}`)} 
+                        >
+                          Lihat Detail
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <div className="py-12 text-center border rounded-lg bg-muted/20">
+                  <p className="text-muted-foreground">Belum ada data observasi untuk spesies {selectedSpecies}.</p>
+                </div>
+              )}
             </div>
           ) : (
-            <div className="py-12 text-center border rounded-lg bg-muted/20">
-              <p className="text-muted-foreground">Tidak ada spesies yang cocok dengan filter tersebut.</p>
-              <button 
-                onClick={() => {setSearch(""); setSelectedCategory("Semua");}}
-                className="mt-4 text-primary hover:underline font-medium"
-              >
-                Reset Filter
-              </button>
-            </div>
+            <>
+              <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    placeholder="Cari nama spesies..."
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+                
+                <div className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0">
+                  <Filter className="h-4 w-4 text-muted-foreground mr-1 hidden sm:block" />
+                  {CATEGORIES.map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => setSelectedCategory(cat)}
+                      className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors border ${
+                        selectedCategory === cat
+                          ? "bg-primary text-primary-foreground border-primary"
+                          : "bg-background text-foreground hover:bg-accent hover:text-accent-foreground hover:border-accent border-border"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {filteredSpecies.length > 0 ? (
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {filteredSpecies.map((species) => (
+                    <Card key={species.id} className="overflow-hidden transition-all hover:shadow-md">
+                      <img
+                        src={species.photoUrl}
+                        alt={species.commonName}
+                        className="h-48 w-full object-cover transition-transform hover:scale-105"
+                        onError={(e) => { (e.target as HTMLImageElement).src = "/placeholder.svg"; }}
+                      />
+                      <CardContent className="p-4">
+                        <h3 className="font-bold text-lg">{species.commonName}</h3>
+                        <p className="text-sm italic text-muted-foreground mb-3">{species.scientificName}</p>
+                        <div className="flex items-center justify-between">
+                          <Badge variant={
+                            species.category === 'Hoya' ? 'default' : 
+                            species.category === 'Kayu' ? 'secondary' : 'outline'
+                          }>
+                            {species.category}
+                          </Badge>
+                          <span className="text-xs font-medium text-muted-foreground bg-muted px-2 py-1 rounded-md">
+                            {species.observationCount} obs
+                          </span>
+                        </div>
+                        <Button 
+                          size="sm" 
+                          className="w-full mt-2 gap-2" 
+                          onClick={() => setSelectedSpecies(species.commonName)} 
+                        >
+                          Lihat Daftar Observasi
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <div className="py-12 text-center border rounded-lg bg-muted/20">
+                  <p className="text-muted-foreground">Tidak ada spesies yang cocok dengan filter tersebut.</p>
+                  <button 
+                    onClick={() => {setSearch(""); setSelectedCategory("Semua");}}
+                    className="mt-4 text-primary hover:underline font-medium"
+                  >
+                    Reset Filter
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </TabsContent>
       </Tabs>
